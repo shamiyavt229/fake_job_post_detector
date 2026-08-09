@@ -1,0 +1,119 @@
+/* Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.App {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.section {
+  margin-top: 25px;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.jobinput {
+  width: 100%;
+  height: 220px;
+  resize: none;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 16px;
+  background: #334155;
+  color: white;
+}
+
+.email {
+  width: 100%;
+  height: 220px;
+  resize: none;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  padding: 18px;
+  font-size: 16px;
+  background: #334155;
+  color: white;
+}
+
+textarea::placeholder {
+  color: #94a3b8;
+}
+
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: #3b82f6;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: .3s;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.result-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.result {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.genuine {
+  color: #22c55e;
+}
+
+.fraud {
+  color: #ef4444;
+}
+
+.confidence {
+  margin-top: 12px;
+  font-size: 18px;
+  color: #cbd5e1;
+}
+
+.reason {
+  background: #334155;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.empty {
+  color: #94a3b8;
+  text-align: center;
+  padding: 20px;
+}

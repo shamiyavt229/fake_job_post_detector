@@ -1,0 +1,29 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Django
+*.sqlite3
+
+# Node
+node_modules/
+dist/
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.vscode/
+
+# Temporary files
+tempCodeRunnerFile.py
+
+# OS
+.DS_Store
+Thumbs.db
+
+#personal
+shamiya.txt

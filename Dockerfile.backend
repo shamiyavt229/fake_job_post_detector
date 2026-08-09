@@ -1,0 +1,17 @@
+FROM python:3.12
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY fake_job_post_backend/ ./fake_job_post_backend/
+COPY fake_job_model.pkl .
+COPY tfidf_vectorizer.pkl .
+
+WORKDIR /app/fake_job_post_backend
+
+EXPOSE 8000
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000","--noreload"]
