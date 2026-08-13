@@ -58,67 +58,86 @@ vectorizer=pickle.load(open(BASE_DIR/"tfidf_vectorizer.pkl","rb"))
 
 @csrf_exempt
 def predict_job(request):
-  
-  if request.method == "POST":
-    
-    
-    data=json.loads(request.body)
-    description=data.get("description")
-    company_email=data.get("company_email")
+    if request.method != "POST":
+        return JsonResponse({
+            "message": "Please send a post request"
+        }, status=405)
+
+    if not request.body:
+        return JsonResponse(
+            {
+                "error": "Invalid JSON payload.",
+                "details": {"body": "Request body is required."},
+            },
+            status=400,
+        )
+
+    try:
+        data = json.loads(request.body)
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return JsonResponse(
+            {
+                "error": "Invalid JSON payload.",
+                "details": {"body": "Request body must be valid JSON."},
+            },
+            status=400,
+        )
+
+    if not isinstance(data, dict):
+        return JsonResponse(
+            {
+                "error": "Invalid JSON payload.",
+                "details": {"body": "Expected a JSON object."},
+            },
+            status=400,
+        )
+
+    description = data.get("description")
+    company_email = data.get("company_email")
     errors = validate_job_input(description, company_email)
 
-    
     print("DESCRIPTION:", description)
     print("COMPANY EMAIL:", company_email)
     print("ERRORS:", errors)
-    
-    
+
     if errors:
-      return JsonResponse(
-        {
-            "error": "Invalid input.",
-            "details": errors,
-        },
-        status=400,
-    )
+        return JsonResponse(
+            {
+                "error": "Invalid input.",
+                "details": errors,
+            },
+            status=400,
+        )
+
     email_warnings = check_company_email(company_email)
     cleaned_description = clean_text(description)
     vector = vectorizer.transform([cleaned_description])
-    
+
     if vector.nnz == 0:
-      return JsonResponse(
-        {
-            "error": (
-                "Please enter a real job description. "
-                "We could not find any recognizable job-related words."
-            )
-        },
-        status=422,
-    )
-    
-    prediction=model.predict(vector)
-    prediction_prob=model.predict_proba(vector)
-    confidence=float(prediction_prob[0][prediction[0]])*100
-    #print("Prediction:", prediction)
-    #print("Probability:", prediction_prob)
-    if prediction[0]==0:
-      result="Genuine job"
+        return JsonResponse(
+            {
+                "error": (
+                    "Please enter a real job description. "
+                    "We could not find any recognizable job-related words."
+                )
+            },
+            status=422,
+        )
+
+    prediction = model.predict(vector)
+    prediction_prob = model.predict_proba(vector)
+    confidence = float(prediction_prob[0][prediction[0]]) * 100
+    if prediction[0] == 0:
+        result = "Genuine job"
     else:
-      result="Fraudulent job"
-    
+        result = "Fraudulent job"
+
     return JsonResponse({
-      "prediction":result,
-      "label":int(prediction[0]),
-      "probability":round(confidence,2),
-      "warnings": email_warnings
-      
-   
+        "prediction": result,
+        "label": int(prediction[0]),
+        "probability": round(confidence, 2),
+        "warnings": email_warnings,
     })
-  
-    
-  return JsonResponse({
-    "message":"Please send a post request"
-  })
 #print(BASE_DIR)
 #print(BASE_DIR / "fake_job_model.pkl")
 #print(BASE_DIR / "tfidf_vectorizer.pkl")
